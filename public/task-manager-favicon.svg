@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Comical task manager icon">
+  <rect width="64" height="64" rx="14" fill="#ffe39a"/>
+  <rect x="12" y="8" width="40" height="48" rx="8" fill="#ffffff" stroke="#3a3a3a" stroke-width="2"/>
+  <rect x="23" y="3" width="18" height="8" rx="4" fill="#3a3a3a"/>
+  <circle cx="25" cy="24" r="3" fill="#3a3a3a"/>
+  <circle cx="39" cy="24" r="3" fill="#3a3a3a"/>
+  <path d="M22 35c3 4 17 4 20 0" fill="none" stroke="#3a3a3a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M18 16l4 4" stroke="#3a3a3a" stroke-width="2" stroke-linecap="round"/>
+  <path d="M46 16l-4 4" stroke="#3a3a3a" stroke-width="2" stroke-linecap="round"/>
+  <path d="M30 40h4l2 13h-8z" fill="#ef5350"/>
+</svg>

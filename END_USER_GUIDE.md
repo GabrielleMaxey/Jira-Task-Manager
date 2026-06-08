@@ -1,0 +1,156 @@
+# Task Manager User Guide (No Coding Needed)
+
+## What This App Does
+Task Manager helps you view and manage your Jira tasks in one screen.
+You can:
+- Load tasks using saved Jira filters.
+- Update task status.
+- Change assignee names.
+- Add private notes before pushing them to Jira comments.
+- Set a simple priority value for your own sorting view.
+
+## Why The App Uses a Database
+- The app uses a small local database so your notes and task priorities are not lost when you close or restart the app.
+- This database is on your machine (not a separate cloud database you need to set up).
+- It is used for app-specific metadata (notes and local priority), while Jira remains the source for Jira issue details.
+
+## Database Setup (No Coding Required)
+1. Start the app normally.
+2. The database is created automatically in the background.
+3. You do not need to create tables or run SQL commands.
+4. If needed, ask your admin/dev to verify the file exists at data/workweek.sqlite.
+
+## Share Database Data
+If you need to share your current saved notes and priorities with someone else, use one of these files:
+
+- Full database snapshot:
+  - data/workweek-share.sqlite
+- Spreadsheet-friendly export:
+  - data/issue_metadata_export.csv
+
+These files were generated from:
+- data/workweek.sqlite
+
+### For Admin/Dev (How They Generate It)
+1. Go to the app folder:
+  - cd /path/to/taskManager
+2. Create a share-safe SQLite backup:
+  - sqlite3 data/workweek.sqlite ".backup data/workweek-share.sqlite"
+3. Create a CSV export:
+  - sqlite3 -header -csv data/workweek.sqlite "SELECT issue_key, note, priority, updated_at FROM issue_metadata ORDER BY updated_at DESC;" > data/issue_metadata_export.csv
+
+### Current Export Size
+- issue_metadata rows exported: 11
+
+## Startup Details
+
+### First-Time Setup
+1. Install Node.js 18+ (or newer).
+2. Open a terminal.
+3. Go to the app folder:
+  - cd /path/to/taskManager
+4. Install dependencies:
+  - npm install
+5. Confirm your Jira environment values are configured in .env (ask your admin/dev if needed).
+
+### Start The App (UI + API)
+1. In the same folder, run:
+  - npm run dev:all
+2. Wait until both services are running.
+3. Open the UI in your browser:
+  - http://localhost:5173
+4. API runs at:
+  - http://localhost:8787
+
+### Stop And Restart
+1. In the terminal running the app, press Ctrl + C.
+2. Start again with:
+  - npm run dev:all
+
+### Quick Health Check
+1. In the app, click Test Jira Connection.
+2. If needed, verify API health in browser:
+  - http://localhost:8787/api/health
+
+## What You See at the Top
+- Joke ticker:
+  - Shows fun workplace jokes.
+  - Includes built-in jokes and sometimes a dad joke from the internet.
+  - Updates slowly (about every 10 minutes).
+- Date and mini calendar:
+  - Shows today’s full date.
+  - Highlights today in a small monthly calendar.
+
+## Quick Start
+1. Open Task Manager.
+2. Click Test Jira Connection.
+3. In JQL fields, keep existing filters or type your own Jira filter.
+4. Click Run JQL.
+5. Review and manage the tasks that appear in the table.
+
+## Using the Task Table
+- Status:
+  - Choose a new status from the dropdown.
+  - Click Update Status.
+- Assignee:
+  - Select or type a person name.
+  - Click Update Assignee.
+- Priority:
+  - Choose P0 to P10.
+  - Lower number can represent higher urgency, based on your team preference.
+- Notes:
+  - Type your note in the Notes area.
+  - Check the row and click Push note (or use Push Selected for many tasks).
+
+## How To Change Priority Row Colors
+- If you do not edit code yourself, share this section with your admin/dev.
+- The row colors are controlled in this file:
+  - src/Pages/workWeekTimerElements.css
+- Priority row color classes:
+  - .ww-row-priority-1
+  - .ww-row-priority-2
+  - .ww-row-priority-3
+  - .ww-row-priority-4
+  - .ww-row-priority-5
+  - .ww-row-priority-0 (default)
+- Dropdown color classes (the priority selector itself):
+  - .ww-priority-1
+  - .ww-priority-2
+  - .ww-priority-3
+  - .ww-priority-4
+  - .ww-priority-5
+  - .ww-priority-neutral
+
+### Simple Update Process
+1. Open src/Pages/workWeekTimerElements.css.
+2. Find the class for the priority you want to change.
+3. Update background-color (and border-color if needed).
+4. Save and refresh the app.
+
+### Example
+- To change priority 1 row color, update .ww-row-priority-1 background-color.
+- To match dropdown color, also update .ww-priority-1.
+
+## Important Behavior
+- Closed/Resolved tasks are locked for editing.
+- Your query labels and filters are remembered.
+- Your notes and row priorities are saved so they are still there later.
+- Notes and priorities are saved in both browser memory and a local database for better durability.
+
+## Tips for Best Results
+- Use clear labels for each JQL query so you know what list you are viewing.
+- Start with a small result count if your list is too large.
+- Use Push Selected to save time when updating many tasks.
+
+## If Something Looks Wrong
+- If connection fails:
+  - Click Test Jira Connection again.
+  - Ask your admin to check Jira setup credentials.
+- If dad joke is missing:
+  - This is okay. The app will keep showing built-in jokes.
+- If updates do not apply:
+  - Refresh and try once more.
+  - If it still fails, report the issue with the task key and action you tried.
+- If notes or priorities do not stay saved:
+  - Keep the app/API running and retry once.
+  - Ask your admin/dev to check local database access and API server logs.
